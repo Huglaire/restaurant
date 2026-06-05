@@ -26,7 +26,7 @@ class RestaurantController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'new', methods: ['POST'])]
+    #[Route('', name: 'new', methods: ['POST'])]
     public function new(Request $request): JsonResponse
     {
         $restaurant = $this->serializer->deserialize($request->getContent(), type: Restaurant::class, format: 'json');
