@@ -54,4 +54,17 @@ final class SecurityController extends AbstractController
             'role' => $user->getRoles()]
         );
     }
+
+    #[Route('/me', name: 'me', methods: ['GET'])]
+    public function me(#[CurrentUser] ?User $user): JsonResponse
+    {
+        if (!$user) {
+            return new JsonResponse(['message' => 'User not found'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
+        // Sérialise l'utilisateur sans groupe spécifique, tous les champs accessibles seront inclus.
+        $data = $this->serializer->serialize($user, 'json', ['groups' => 'profile']);
+
+        return new JsonResponse($data, json: true);
+    }
 }
