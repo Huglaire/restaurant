@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -65,6 +66,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->apiToken = bin2hex(string: random_bytes(20));
+    }
+
+    //Ajout de la méthode de hachage de mot de passe
+    public function setPlainPassword(string $plainPassword, UserPasswordHasherInterface $hasher): static
+    {
+        $this->password = $hasher->hashPassword($this, $plainPassword);
+
+        return $this;
     }
 
     public function getId(): ?int
