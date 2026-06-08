@@ -7,6 +7,7 @@ use App\Repository\FoodRepository;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +29,51 @@ class FoodController extends AbstractController
     }
 
     #[Route('/', name: 'new', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/food/',
+        summary: 'Créer un plat'
+    )]
+
+    #[OA\RequestBody(
+        required: true,
+        description: 'Données du plat à créer',
+        content: new OA\JsonContent(
+            type: 'object',
+            required: ['title', 'price'],
+            properties: [
+                new OA\Property(
+                    property: 'title',
+                    type: 'string',
+                    example: 'Nom du plat'
+                ),
+                new OA\Property(
+                    property: 'description',
+                    type: 'string',
+                    example: 'Description du plat'
+                ),
+                new OA\Property(
+                    property: 'price',
+                    type: 'integer',
+                    example: 29
+                )
+            ]
+        )
+    )]
+
+    #[OA\Response(
+        response: 201,
+        description: 'Plat créé avec succès',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(property: 'id', type: 'integer', example: 1),
+                new OA\Property(property: 'title', type: 'string', example: 'Filet de bœuf'),
+                new OA\Property(property: 'description', type: 'string', example: 'Filet de bœuf sauce morilles'),
+                new OA\Property(property: 'price', type: 'integer', example: 29),
+                new OA\Property(property: 'createdAt', type: 'string', format: 'date-time')
+            ]
+        )
+    )]
     public function new(Request $request): JsonResponse
     {
         $food = $this->serializer->deserialize($request->getContent(), type: Food::class, format: 'json');
@@ -52,6 +98,42 @@ class FoodController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
+    #[OA\Get(
+        path: '/api/food/{id}',
+        summary: 'Afficher un plat par id'
+    )]
+
+    #[OA\Parameter(
+        name: 'id',
+        in: 'path',
+        required: true,
+        description: 'ID du plat',
+        schema: new OA\Schema(
+            type: 'integer',
+            example: 1
+        )
+    )]
+
+    #[OA\Response(
+        response: 200,
+        description: 'Plat trouvé',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(property: 'id', type: 'integer', example: 1),
+                new OA\Property(property: 'title', type: 'string', example: 'Filet de bœuf'),
+                new OA\Property(property: 'description', type: 'string', example: 'Filet de bœuf sauce morilles'),
+                new OA\Property(property: 'price', type: 'integer', example: 29),
+                new OA\Property(property: 'createdAt', type: 'string', format: 'date-time')
+            ]
+        )
+    )]
+
+    #[OA\Response(
+        response: 404,
+        description: 'Plat non trouvé'
+    )]
+
     public function show(int $id): JsonResponse
     {
         $food = $this->repository->findOneBy(['id' => $id]);
@@ -72,6 +154,57 @@ class FoodController extends AbstractController
     }
 
     #[Route('/{id}', name: 'edit', methods: ['PUT'])]
+    #[OA\Put(
+        path: '/api/food/{id}',
+        summary: 'Modifier un plat par id'
+    )]
+
+    #[OA\Parameter(
+        name: 'id',
+        in: 'path',
+        required: true,
+        description: 'ID du plat à modifier',
+        schema: new OA\Schema(
+            type: 'integer',
+            example: 1
+        )
+    )]
+
+    #[OA\RequestBody(
+        required: true,
+        description: 'Nouvelles données du plat',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(
+                    property: 'title',
+                    type: 'string',
+                    example: 'Nouveau nom du plat'
+                ),
+                new OA\Property(
+                    property: 'description',
+                    type: 'string',
+                    example: 'Nouvelle description'
+                ),
+                new OA\Property(
+                    property: 'price',
+                    type: 'integer',
+                    example: 32
+                )
+            ]
+        )
+    )]
+
+    #[OA\Response(
+        response: 204,
+        description: 'Plat modifié avec succès'
+    )]
+
+    #[OA\Response(
+        response: 404,
+        description: 'Plat non trouvé'
+    )]
+
     public function edit(int $id, Request $request): JsonResponse
     {
         $food = $this->repository->findOneBy(['id' => $id]);
@@ -100,6 +233,32 @@ class FoodController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+    #[OA\Delete(
+        path: '/api/food/{id}',
+        summary: 'Supprimer un plat avec son id'
+    )]
+
+    #[OA\Parameter(
+        name: 'id',
+        in: 'path',
+        required: true,
+        description: 'ID du plat à supprimer',
+        schema: new OA\Schema(
+            type: 'integer',
+            example: 1
+        )
+    )]
+
+    #[OA\Response(
+        response: 204,
+        description: 'Plat supprimé avec succès'
+    )]
+
+    #[OA\Response(
+        response: 404,
+        description: 'Plat non trouvé'
+    )]
+
     public function delete(int $id): JsonResponse
     {
         $food = $this->repository->findOneBy(['id' => $id]);
