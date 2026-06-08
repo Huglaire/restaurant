@@ -187,6 +187,56 @@ final class SecurityController extends AbstractController
     }
 
     #[Route('/me', name: 'me', methods: ['GET'])]
+    #[OA\Get(
+        path: '/api/me',
+        summary: 'Afficher le profil de l\'utilisateur connecté'
+    )]
+
+    #[OA\Response(
+        response: 200,
+        description: 'Profil récupéré avec succès',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(
+                    property: 'id',
+                    type: 'integer',
+                    example: 1
+                ),
+                new OA\Property(
+                    property: 'firstName',
+                    type: 'string',
+                    example: 'Jean'
+                ),
+                new OA\Property(
+                    property: 'lastName',
+                    type: 'string',
+                    example: 'Dupont'
+                ),
+                new OA\Property(
+                    property: 'email',
+                    type: 'string',
+                    example: 'jean.dupont@email.com'
+                ),
+                new OA\Property(
+                    property: 'guestNumber',
+                    type: 'integer',
+                    example: 4
+                ),
+                new OA\Property(
+                    property: 'allergy',
+                    type: 'string',
+                    example: 'Arachides'
+                )
+            ]
+        )
+    )]
+
+    #[OA\Response(
+        response: 401,
+        description: 'Utilisateur non authentifié'
+    )]
+
     public function me(#[CurrentUser] ?User $user): JsonResponse
     {
         if (!$user) {
@@ -200,6 +250,71 @@ final class SecurityController extends AbstractController
     }
 
     #[Route('/edit/{id}', name: 'edit', methods: ['PUT'])]
+    #[OA\Put(
+        path: '/api/edit/{id}',
+        summary: 'Modifier un utilisateur par Id'
+    )]
+
+    #[OA\Parameter(
+        name: 'id',
+        in: 'path',
+        required: true,
+        description: 'ID de l\'utilisateur à modifier',
+        schema: new OA\Schema(
+            type: 'integer',
+            example: 1
+        )
+    )]
+
+    #[OA\RequestBody(
+        required: true,
+        description: 'Nouvelles données utilisateur',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(
+                    property: 'firstName',
+                    type: 'string',
+                    example: 'Nouveau prénom'
+                ),
+                new OA\Property(
+                    property: 'lastName',
+                    type: 'string',
+                    example: 'Nouveau nom de famille'
+                ),
+                new OA\Property(
+                    property: 'guestNumber',
+                    type: 'integer',
+                    example: 6
+                ),
+                new OA\Property(
+                    property: 'allergy',
+                    type: 'string',
+                    example: 'Nouvelle allergie'
+                ),
+                new OA\Property(
+                    property: 'email',
+                    type: 'string',
+                    example: 'nouvelleadresse@email.com'
+                ),
+                new OA\Property(
+                    property: 'password',
+                    type: 'string',
+                    example: 'NouveauMotDePasse123'
+                )
+            ]
+        )
+    )]
+
+    #[OA\Response(
+        response: 204,
+        description: 'Utilisateur modifié avec succès'
+    )]
+
+    #[OA\Response(
+        response: 404,
+        description: 'Utilisateur introuvable'
+    )]
     public function edit(
         int $id,
         Request $request,
