@@ -20,12 +20,12 @@ class ApiTokenAuthenticator extends AbstractAuthenticator
     public function __construct(private UserRepository $repository){}
     public function supports(Request $request): ?bool
     {
-        return $request->headers->has('auth-token');
+        return $request->headers->has('X-AUTH-TOKEN');
     }
 
     public function authenticate(Request $request): Passport
     {
-        $apiToken = $request->headers->get('auth-token');
+        $apiToken = $request->headers->get('X-AUTH-TOKEN');
                 if (null === $apiToken) {
                     throw new CustomUserMessageAuthenticationException('No API token provided');
         }

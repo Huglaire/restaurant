@@ -117,6 +117,59 @@ final class SecurityController extends AbstractController
 
 
     #[Route('/login', name: 'login', methods:['POST'])]
+    #[OA\Post(
+        path: '/api/login',
+        summary: 'Connecter un utilisateur'
+    )]
+
+    #[OA\RequestBody(
+        required: true,
+        description: 'Données de l\'utilisateur à inscrire',
+        content: new OA\JsonContent(
+            type: 'object',
+            required: ['firstName', 'lastName', 'guestNumber', 'email', 'password'],
+            properties: [
+                new OA\Property(
+                    property: 'username',
+                    type: 'string',
+                    example: 'Jean'
+                ),
+                new OA\Property(
+                    property: 'password',
+                    type: 'string',
+                    example: 'MotDePasse123'
+                )
+            ]
+        )
+    )]
+
+    #[OA\Response(
+        response: 200,
+        description: 'Connexion réussie',
+        content: new OA\JsonContent(
+            type: 'object',
+            properties: [
+                new OA\Property(
+                    property: 'user',
+                    type: 'string',
+                    example: 'Nom d\'utilisateur'
+                ),
+                new OA\Property(
+                    property: 'apiToken',
+                    type: 'string',
+                    example: '31a023e212f116124a36af14ea0c1c3806eb9378'
+                ),
+                new OA\Property(
+                    property: 'roles',
+                    type: 'array',
+                    items: new OA\Items(
+                        type: 'string',
+                        example: 'ROLE_USER'
+                    )
+                )
+            ]
+        )
+    )]
     public function login(#[CurrentUser] ?User $user): JsonResponse
     {
 
