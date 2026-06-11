@@ -7,21 +7,28 @@ use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Faker;
 
 class UserFixtures extends Fixture
 {
+    public const USER_NB_TUPLES =20;
+    public const USER_REFERENCE = "user";
+
     public function __construct(private UserPasswordHasherInterface $passwordHasher)
     {
     }
 
     public function load(ObjectManager $manager): void
     {
-        for($i = 1; $i <= 20; $i++) {
+
+        $faker = Faker\Factory::create('fr_FR');
+
+        for($i = 1; $i <= self::USER_NB_TUPLES; $i++) {
         $user = (new User())
-            ->setFirstName(firstName: "Firstname $i")
-            ->setLastName(lastName: "Lastname $i")
+            ->setFirstName($faker->firstName())
+            ->setLastName($faker->lastName())
             ->setGuestNumber(random_int(1, 10))
-            ->setEmail(email: "email.$i@mail.com")
+            ->setEmail($faker->email())
             ->setCreatedAt(new DateTimeImmutable())
             ->setRoles(["ROLE_USER"]);
 
