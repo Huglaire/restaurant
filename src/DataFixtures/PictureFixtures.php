@@ -7,18 +7,26 @@ use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Override;
+use Faker;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class PictureFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const PICTURE_NB_TUPLES =20;
+    public const PICTURE_REFERENCE = "picture";
 
     public function load(ObjectManager $manager): void
     {
-        for($i = 1; $i <= 20; $i++) {
+
+        $faker = Faker\Factory::create('fr_FR');
+        $slugger = new AsciiSlugger();
+
+        for($i = 1; $i <= self::PICTURE_NB_TUPLES; $i++) {
+        $title = $faker->sentence(3);
         $picture = (new Picture())
-            ->setTitle(title: "Image $i")
-            ->setSlug(slug: "slug-article-title $i")
-            ->setRestaurant($this->getReference("restaurant" . random_int(1, 20),
+            ->setTitle($title)
+            ->setSlug(strtolower($slugger->slug($title)))
+            ->setRestaurant($this->getReference(RestaurantFixtures::RESTAURANT_REFERENCE . random_int(1, 20),
         Restaurant::class
     )
 )
@@ -28,7 +36,7 @@ class PictureFixtures extends Fixture implements DependentFixtureInterface
         }
         $manager->flush();
     }
-    #[Override]
+
     public function getDependencies(): array
     {
         return [RestaurantFixtures::class];
