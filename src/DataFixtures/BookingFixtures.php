@@ -32,6 +32,12 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
                         Restaurant::class
                     )
                 )
+                ->setClient(
+                    $this->getReference(
+                        UserFixtures::USER_REFERENCE . random_int(1, UserFixtures::USER_NB_TUPLES),
+                        User::class
+                    )
+                )
                 ->setCreatedAt(new DateTimeImmutable());
 
             $manager->persist($booking);
@@ -49,6 +55,7 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             RestaurantFixtures::class,
+            UserFixtures::class,
         ];
     }
 }

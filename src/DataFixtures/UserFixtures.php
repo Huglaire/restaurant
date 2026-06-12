@@ -35,6 +35,11 @@ class UserFixtures extends Fixture
         $user->setPassword($this->passwordHasher->hashPassword($user, plainPassword: "password$i"));
 
         $manager->persist($user);
+
+        $this->addReference(
+        self::USER_REFERENCE . $i,
+        $user
+);
         }
         $manager->flush();
     }
