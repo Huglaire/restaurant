@@ -208,7 +208,7 @@ class BookingController extends AbstractController
     #[Route('/{id}', name: 'edit', methods: ['PUT'])]
     #[OA\Put(
         path: '/api/booking/{id}',
-        summary: 'Modifier une réservation'
+        summary: 'Modifier une réservation par id'
     )]
 
     #[OA\Parameter(
@@ -294,7 +294,7 @@ class BookingController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     #[OA\Delete(
         path: '/api/booking/{id}',
-        summary: 'Supprimer une réservation'
+        summary: 'Supprimer une réservation par id'
     )]
 
     #[OA\Parameter(
