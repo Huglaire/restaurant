@@ -37,7 +37,7 @@ class MenuFixtures extends Fixture implements DependentFixtureInterface
                 )
                 ->setCreatedAt(new DateTimeImmutable());
 
-            // Ajout de 1 à 3 catégories aléatoires
+            // Associe entre 1 et 3 catégories au menu
             $nbCategories = random_int(1, 3);
 
             for ($j = 1; $j <= $nbCategories; $j++) {

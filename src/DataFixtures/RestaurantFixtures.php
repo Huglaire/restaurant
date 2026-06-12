@@ -10,13 +10,18 @@ use Faker\Factory;
 
 class RestaurantFixtures extends Fixture
 {
+    public const RESTAURANT_NB_TUPLES = 20;
+    public const RESTAURANT_REFERENCE = 'restaurant';
 
     public function load(ObjectManager $manager): void
     {
-        for($i = 1; $i <= 20; $i++) {
+        $faker = Factory::create('fr_FR');
+
+        for ($i = 1; $i <= self::RESTAURANT_NB_TUPLES; $i++) {
+
             $restaurant = (new Restaurant())
-                ->setName(name: "Restaurant $i")
-                ->setDescription(description: "Description $i")
+                ->setName($faker->company())
+                ->setDescription($faker->paragraph(3))
                 ->setAmOpeningTime([])
                 ->setPmOpeningTime([])
                 ->setMaxGuest(random_int(10, 50))
