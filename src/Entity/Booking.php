@@ -1,11 +1,10 @@
 <?php
-
 namespace App\Entity;
 
-use App\Entity\User;
 use App\Repository\BookingRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 class Booking
@@ -13,24 +12,31 @@ class Booking
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['booking'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
+    #[Groups(['booking'])]
     private ?int $guestNumber = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['booking'])]
     private ?\DateTime $orderDate = null;
 
     #[ORM\Column]
+    #[Groups(['booking'])]
     private ?\DateTime $orderHour = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['booking'])]
     private ?string $allergy = null;
 
     #[ORM\Column]
+    #[Groups(['booking'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['booking'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
