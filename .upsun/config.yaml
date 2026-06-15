@@ -62,7 +62,7 @@ applications:
                     start: croncape php-session-clean
 
         source:
-            root: .
+            root: /
 
 services:
     database:
