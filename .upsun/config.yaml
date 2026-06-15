@@ -50,7 +50,7 @@ applications:
             root: \
 services:
     database:
-        type: mysql:8.0
+        type: mariadb:10.11
 routes:
     "https://{all}/": {type: upstream, upstream: "app:http"}
     "http://{all}/": {type: redirect, to: "https://{all}/"}
