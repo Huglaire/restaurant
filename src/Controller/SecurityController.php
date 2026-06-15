@@ -128,12 +128,12 @@ final class SecurityController extends AbstractController
         description: 'Données de l\'utilisateur à inscrire',
         content: new OA\JsonContent(
             type: 'object',
-            required: ['firstName', 'lastName', 'guestNumber', 'email', 'password'],
+            required: ['username', 'password'],
             properties: [
                 new OA\Property(
                     property: 'username',
                     type: 'string',
-                    example: 'Jean'
+                    example: 'adressemail@email.com'
                 ),
                 new OA\Property(
                     property: 'password',
