@@ -112,7 +112,7 @@ final class SecurityController extends AbstractController
         return new JsonResponse(
             ['user' => $user->getUserIdentifier(),
             'apiToken' => $user->getApiToken(),
-            'role' => $user->getRoles()],
+            'roles' => $user->getRoles()],
             status:Response::HTTP_CREATED);
     }
 
@@ -183,7 +183,7 @@ final class SecurityController extends AbstractController
         return new JsonResponse(
             ['user' => $user->getUserIdentifier(),
             'apiToken' => $user->getApiToken(),
-            'role' => $user->getRoles()]
+            'roles' => $user->getRoles()]
         );
     }
 
